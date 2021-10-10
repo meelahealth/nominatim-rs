@@ -1,11 +1,40 @@
 use serde::{Deserializer, Serializer};
 use std::str::FromStr;
 
-pub fn serialize_as_string<T, S>(t: &T, s: S) -> Result<S::Ok, S::Error>
+pub fn serialize_vector_as_string<T, S>(vec: &Vec<T>, s: S) -> Result<S::Ok, S::Error>
     where
         T: ToString,
         S: Serializer {
-    s.serialize_str(&t.to_string())
+    let mut string = String::new();
+
+    for item in vec {
+        string.push_str(&item.to_string());
+        string.push(',');
+    }
+    string.pop();
+    
+    s.serialize_str(&string)
+}
+
+pub fn serialize_vector_as_string_opt<'a, I, T, S>(vec: &'a Option<I>, s: S) -> Result<S::Ok, S::Error>
+    where
+        &'a I: IntoIterator<Item=T> + 'a,
+        T: ToString + 'a,
+        S: Serializer {
+    match vec {
+        Some(ref vec) => {
+            let mut string = String::new();
+
+            for item in vec.into_iter() {
+                string.push_str(&item.to_string());
+                string.push(',');
+            }
+            string.pop();
+            
+            s.serialize_some(&string)
+        }
+        None => s.serialize_none(),
+    }
 }
 
 pub fn serialize_as_string_opt<T, S>(t: &Option<T>, s: S) -> Result<S::Ok, S::Error>
@@ -16,6 +45,22 @@ pub fn serialize_as_string_opt<T, S>(t: &Option<T>, s: S) -> Result<S::Ok, S::Er
         Some(ref t) => s.serialize_some(&t.to_string()),
         None => s.serialize_none(),
     }
+}
+
+pub fn serialize_bool_as_string<S>(boolean: &bool, s: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer {
+    match boolean {
+        true => s.serialize_str("1"),
+        false => s.serialize_str("0"),
+    }
+}
+
+pub fn serialize_as_string<T, S>(t: &T, s: S) -> Result<S::Ok, S::Error>
+    where
+        T: ToString,
+        S: Serializer {
+    s.serialize_str(&t.to_string())
 }
 
 pub fn deserialize_from_string<'de, T, D>(d: D) -> Result<T, D::Error>
