@@ -1,5 +1,8 @@
 use crate::types::ViewBox;
+use derive_builder::Builder;
+use std::fmt;
 
+#[derive(Debug)]
 pub struct Street {
     pub house_number: String,
     pub street_name: String,
@@ -27,7 +30,8 @@ pub enum LocationQuery {
     }
 }
 
-pub struct SearchQuery {
+#[derive(Default, Builder, Debug)]
+pub struct SearchQuery<'a> {
     /// Limit search results to one of more countries. The country code must
     /// be the
     /// [ISO-3166-1alpha2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
@@ -36,7 +40,7 @@ pub struct SearchQuery {
     /// Each place in Nominatim is assigned to one country code based of OSM
     /// country borders. In rare cases a place may not be in any country at
     /// all, for example, in international waters.
-    pub country_codes: Vec<String>,
+    pub country_codes: Vec<&'a str>,
     /// If you do not want certain OSM objects to appear in the search
     /// result, give a comma separated list of the `place_id`s you want to
     /// skip. This can be used to retrieve additional search results.

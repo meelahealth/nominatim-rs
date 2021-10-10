@@ -1,6 +1,7 @@
 pub mod search;
 pub mod types;
 pub mod serde_utils;
+pub mod client;
 
 #[cfg(test)]
 mod tests {
