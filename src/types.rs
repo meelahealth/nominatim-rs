@@ -4,14 +4,6 @@ pub use std::collections::HashMap;
 use std::fmt;
 use std::convert::Infallible;
 
-/// Stores a point, longitude and latitude.
-pub type Point = (f64, f64);
-
-/// Stores two points, longitude and latitude. Any two corner points of the
-/// box are accepted as long as they span a real box. `x` is longitude,
-/// `y` is latitude.
-pub type ViewBox = (Point, Point);
-
 pub enum OsmType {
     Node,
     Way,
