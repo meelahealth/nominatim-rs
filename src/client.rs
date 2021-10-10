@@ -16,18 +16,18 @@ impl Client {
     /// Creates a new client base
     ///
     /// # User Agent
-    /// 
+    ///
     /// The user agent of your service. This is required by the Nominatim
     /// ToS.
     ///
     /// # Email
-    /// 
+    ///
     /// ***Strongly Recommended***, your email so Nominatim can contact you
     /// in case they dislike your usecase.
     pub fn new(
         base_url: reqwest::Url,
         user_agent: String,
-        email: Option<String>
+        email: Option<String>,
     ) -> reqwest::Result<Self> {
         Ok(Self {
             client: reqwest::Client::builder()

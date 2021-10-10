@@ -1,10 +1,10 @@
-use derive_builder::Builder;
 use crate::client::Client;
-use serde::Serialize;
-use crate::types::Response;
-use crate::util::RequestBuilderHelper;
 use crate::error::Error;
 use crate::serde_utils::*;
+use crate::types::Response;
+use crate::util::RequestBuilderHelper;
+use derive_builder::Builder;
+use serde::Serialize;
 
 #[derive(Debug, Default, Clone, Serialize)]
 #[serde(into = "String")]
@@ -41,7 +41,7 @@ pub enum LocationQuery {
         country: Option<String>,
         #[serde(rename = "postalcode")]
         postal_code: Option<String>,
-    }
+    },
 }
 
 #[derive(Builder, Debug, Clone, Serialize)]
@@ -118,14 +118,16 @@ pub struct SearchQuery {
 }
 
 impl Client {
-    pub async fn search(&self, query: SearchQuery) -> Result<Vec<Response>, Error> {
+    pub async fn search(
+        &self,
+        query: SearchQuery,
+    ) -> Result<Vec<Response>, Error> {
         let mut url = self.base_url.join("search")?;
         url.set_query(Some(&serde_urlencoded::to_string(&query).unwrap()));
 
         println!("{}", url);
-        
-        let mut builder = self.client.get(url)
-            .query_s("format", "json");
+
+        let mut builder = self.client.get(url).query_s("format", "json");
 
         let response = builder.send().await?;
 
@@ -137,7 +139,7 @@ impl Client {
         let text = response.text().await?;
 
         println!("```\n{}\n```", text);
-        
+
         Ok(serde_json::from_str(&text)?)
     }
 }

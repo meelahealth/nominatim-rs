@@ -1,10 +1,14 @@
 use serde::{Deserializer, Serializer};
 use std::str::FromStr;
 
-pub fn serialize_vector_as_string<T, S>(vec: &Vec<T>, s: S) -> Result<S::Ok, S::Error>
-    where
-        T: ToString,
-        S: Serializer {
+pub fn serialize_vector_as_string<T, S>(
+    vec: &Vec<T>,
+    s: S,
+) -> Result<S::Ok, S::Error>
+where
+    T: ToString,
+    S: Serializer,
+{
     let mut string = String::new();
 
     for item in vec {
@@ -12,15 +16,19 @@ pub fn serialize_vector_as_string<T, S>(vec: &Vec<T>, s: S) -> Result<S::Ok, S::
         string.push(',');
     }
     string.pop();
-    
+
     s.serialize_str(&string)
 }
 
-pub fn serialize_vector_as_string_opt<'a, I, T, S>(vec: &'a Option<I>, s: S) -> Result<S::Ok, S::Error>
-    where
-        &'a I: IntoIterator<Item=T> + 'a,
-        T: ToString + 'a,
-        S: Serializer {
+pub fn serialize_vector_as_string_opt<'a, I, T, S>(
+    vec: &'a Option<I>,
+    s: S,
+) -> Result<S::Ok, S::Error>
+where
+    &'a I: IntoIterator<Item = T> + 'a,
+    T: ToString + 'a,
+    S: Serializer,
+{
     match vec {
         Some(ref vec) => {
             let mut string = String::new();
@@ -30,26 +38,34 @@ pub fn serialize_vector_as_string_opt<'a, I, T, S>(vec: &'a Option<I>, s: S) -> 
                 string.push(',');
             }
             string.pop();
-            
+
             s.serialize_some(&string)
         }
         None => s.serialize_none(),
     }
 }
 
-pub fn serialize_as_string_opt<T, S>(t: &Option<T>, s: S) -> Result<S::Ok, S::Error>
-    where
-        T: ToString,
-        S: Serializer, {
+pub fn serialize_as_string_opt<T, S>(
+    t: &Option<T>,
+    s: S,
+) -> Result<S::Ok, S::Error>
+where
+    T: ToString,
+    S: Serializer,
+{
     match *t {
         Some(ref t) => s.serialize_some(&t.to_string()),
         None => s.serialize_none(),
     }
 }
 
-pub fn serialize_bool_as_string<S>(boolean: &bool, s: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer {
+pub fn serialize_bool_as_string<S>(
+    boolean: &bool,
+    s: S,
+) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
     match boolean {
         true => s.serialize_str("1"),
         false => s.serialize_str("0"),
@@ -57,35 +73,42 @@ pub fn serialize_bool_as_string<S>(boolean: &bool, s: S) -> Result<S::Ok, S::Err
 }
 
 pub fn serialize_as_string<T, S>(t: &T, s: S) -> Result<S::Ok, S::Error>
-    where
-        T: ToString,
-        S: Serializer {
+where
+    T: ToString,
+    S: Serializer,
+{
     s.serialize_str(&t.to_string())
 }
 
 pub fn deserialize_from_string<'de, T, D>(d: D) -> Result<T, D::Error>
-    where
-        T: FromStr,
-        D: Deserializer<'de> {
+where
+    T: FromStr,
+    D: Deserializer<'de>,
+{
     Ok(d.deserialize_string(string_visitor::FromStrVisitor::<T>::default())?)
 }
 
-pub fn deserialize_from_string_opt<'de, T, D>(d: D) -> Result<Option<T>, D::Error>
-    where
-        T: FromStr,
-        D: Deserializer<'de> {
-    Ok(d.deserialize_option(opt_string_visitor::OptionFromStrVisitor::<T>::default())?)
+pub fn deserialize_from_string_opt<'de, T, D>(
+    d: D,
+) -> Result<Option<T>, D::Error>
+where
+    T: FromStr,
+    D: Deserializer<'de>,
+{
+    Ok(d.deserialize_option(
+        opt_string_visitor::OptionFromStrVisitor::<T>::default(),
+    )?)
 }
 
 mod string_visitor {
     use serde::de::*;
-    use std::str;
     use std::fmt;
-    use std::str::FromStr;
     use std::marker::PhantomData;
+    use std::str;
+    use std::str::FromStr;
 
-    pub struct FromStrVisitor<T: FromStr>{
-        _marker: PhantomData<T>
+    pub struct FromStrVisitor<T: FromStr> {
+        _marker: PhantomData<T>,
     }
 
     impl<T: FromStr> Default for FromStrVisitor<T> {
@@ -107,14 +130,16 @@ mod string_visitor {
         where
             E: Error,
         {
-            v.parse().map_err(|_| E::custom(format!("cannot be parsed: {}", v)))
+            v.parse()
+                .map_err(|_| E::custom(format!("cannot be parsed: {}", v)))
         }
 
         fn visit_string<E>(self, v: String) -> Result<Self::Value, E>
         where
             E: Error,
         {
-            v.parse().map_err(|_| E::custom(format!("cannot be parsed: {}", v)))
+            v.parse()
+                .map_err(|_| E::custom(format!("cannot be parsed: {}", v)))
         }
 
         fn visit_bytes<E>(self, v: &[u8]) -> Result<Self::Value, E>
@@ -122,8 +147,12 @@ mod string_visitor {
             E: Error,
         {
             match str::from_utf8(v) {
-                Ok(s) => s.parse().map_err(|_| E::custom(format!("cannot be parsed: {}", s))),
-                Err(_) => Err(Error::invalid_value(Unexpected::Bytes(v), &self)),
+                Ok(s) => s
+                    .parse()
+                    .map_err(|_| E::custom(format!("cannot be parsed: {}", s))),
+                Err(_) => {
+                    Err(Error::invalid_value(Unexpected::Bytes(v), &self))
+                }
             }
         }
     }
@@ -132,11 +161,11 @@ mod string_visitor {
 mod opt_string_visitor {
     use serde::de::*;
     use std::fmt;
-    use std::str::FromStr;
     use std::marker::PhantomData;
+    use std::str::FromStr;
 
-    pub struct OptionFromStrVisitor<T: FromStr>{
-        _marker: PhantomData<T>
+    pub struct OptionFromStrVisitor<T: FromStr> {
+        _marker: PhantomData<T>,
     }
 
     impl<T: FromStr> Default for OptionFromStrVisitor<T> {
