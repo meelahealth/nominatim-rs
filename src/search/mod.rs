@@ -125,10 +125,7 @@ impl Client {
         let mut url = self.base_url.join("search")?;
         url.set_query(Some(&serde_urlencoded::to_string(&query).unwrap()));
 
-        println!("{}", url);
-
         let mut builder = self.client.get(url).query_s("format", "json");
-
         let response = builder.send().await?;
 
         let status = response.status();
@@ -137,8 +134,6 @@ impl Client {
         }
 
         let text = response.text().await?;
-
-        println!("```\n{}\n```", text);
 
         Ok(serde_json::from_str(&text)?)
     }
