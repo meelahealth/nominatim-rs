@@ -1,4 +1,4 @@
-use crate::types::{ViewBox, Point};
+use crate::types::ViewBox;
 
 pub struct Street {
     pub house_number: String,

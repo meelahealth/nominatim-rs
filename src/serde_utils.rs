@@ -1,4 +1,4 @@
-use serde::{Deserializer, Serializer, Serialize};
+use serde::{Deserializer, Serializer};
 use std::str::FromStr;
 
 pub fn serialize_as_string<T, S>(t: &T, s: S) -> Result<S::Ok, S::Error>
@@ -86,7 +86,6 @@ mod string_visitor {
 
 mod opt_string_visitor {
     use serde::de::*;
-    use std::str;
     use std::fmt;
     use std::str::FromStr;
     use std::marker::PhantomData;
