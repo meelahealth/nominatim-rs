@@ -9,9 +9,9 @@ async fn search() {
 
     let search = client
         .search(
-            nominatim::search::SearchQueryBuilder::default()
+            nominatim::SearchQueryBuilder::default()
                 .address_details(true)
-                .location_query(nominatim::search::LocationQuery::Generalised {
+                .location_query(nominatim::LocationQuery::Generalised {
                     q: "bakery in berlin wedding".to_string(),
                 })
                 .limit(Some(1))
@@ -21,7 +21,7 @@ async fn search() {
         .await
         .unwrap();
 
-    let search_expected: nominatim::types::Response =
+    let search_expected: nominatim::Response =
         serde_json::from_str(include_str!("./search_expected.json")).unwrap();
 
     println!("{}", serde_json::to_string_pretty(&search).unwrap());

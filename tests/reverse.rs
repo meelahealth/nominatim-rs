@@ -9,11 +9,11 @@ async fn reverse() {
 
     let reverse = client
         .reverse(
-            nominatim::reverse::ReverseQueryBuilder::default()
+            nominatim::ReverseQueryBuilder::default()
                 .address_details(true)
                 .lon(13.53918)
                 .lat(52.5460941)
-                .zoom(nominatim::reverse::Zoom::Building)
+                .zoom(nominatim::Zoom::Building)
                 .build()
                 .unwrap(),
         )
@@ -22,7 +22,7 @@ async fn reverse() {
 
     println!("{}", serde_json::to_string_pretty(&reverse).unwrap());
 
-    let reverse_expected: nominatim::types::Response =
+    let reverse_expected: nominatim::Response =
         serde_json::from_str(include_str!("./reverse_expected.json")).unwrap();
 
     assert_eq!(reverse, reverse_expected);

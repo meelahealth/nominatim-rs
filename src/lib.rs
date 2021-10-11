@@ -7,3 +7,8 @@ pub mod types;
 pub mod util;
 
 pub use client::Client;
+pub use reverse::Zoom;
+pub use reverse::ReverseQueryBuilder;
+pub use search::SearchQueryBuilder;
+pub use search::LocationQuery;
+pub use types::Response;
