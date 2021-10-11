@@ -1,0 +1,21 @@
+{
+    "place_id": 182143190,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 391407797,
+    "lat": "52.54479867088309",
+    "lon": "13.539087085722539",
+    "display_name": "Wiesenburger Weg, Gewerbepark Marzahn, Marzahn, Marzahn-Hellersdorf, Berlin, 12681, Deutschland",
+    "address": {
+        "road": "Wiesenburger Weg",
+        "industrial": "Gewerbepark Marzahn",
+        "suburb": "Marzahn",
+        "borough": "Marzahn-Hellersdorf",
+        "city": "Berlin",
+        "state": "Berlin",
+        "postcode": "12681",
+        "country": "Deutschland",
+        "country_code": "de"
+    },
+    "boundingbox": ["52.5447731", "52.5449556", "13.5369099", "13.5394436"]
+}

@@ -49,9 +49,9 @@ pub struct SearchQuery {
     #[serde(flatten)]
     pub location_query: LocationQuery,
     /// Include a breakdown of the address into elements
-    #[builder(default)]
     #[serde(rename = "addressdetails")]
     #[serde(serialize_with = "serialize_bool_as_string")]
+    #[builder(default = "true")]
     pub address_details: bool,
     /// Include additional information if the result is available
     #[builder(default)]
@@ -125,7 +125,7 @@ impl Client {
         let mut url = self.base_url.join("search")?;
         url.set_query(Some(&serde_urlencoded::to_string(&query).unwrap()));
 
-        let mut builder = self.client.get(url).query_s("format", "json");
+        let builder = self.client.get(url).query_s("format", "json");
         let response = builder.send().await?;
 
         let status = response.status();

@@ -1,6 +1,7 @@
 pub mod client;
 pub mod error;
 pub mod search;
+pub mod reverse;
 pub mod serde_utils;
 pub mod types;
 pub mod util;

@@ -4,7 +4,7 @@ use std::convert::Infallible;
 use std::fmt;
 use std::str::FromStr;
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 #[serde(from = "String")]
 #[serde(into = "String")]
 pub enum OsmType {
@@ -60,7 +60,7 @@ impl From<OsmType> for String {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 pub struct Country {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub country: Option<String>,
@@ -68,7 +68,7 @@ pub struct Country {
     pub country_code: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 pub struct Region {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
@@ -80,7 +80,7 @@ pub struct Region {
     pub county: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 pub struct Municipality {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub municiplality: Option<String>,
@@ -92,7 +92,7 @@ pub struct Municipality {
     pub village: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 pub struct CityDistrict {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub city_district: Option<String>,
@@ -106,7 +106,7 @@ pub struct CityDistrict {
     pub subdivision: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 pub struct Hamlet {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hamlet: Option<String>,
@@ -116,7 +116,7 @@ pub struct Hamlet {
     pub isolated_dwelling: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 pub struct Neighbourhood {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub neighbourhood: Option<String>,
@@ -126,7 +126,7 @@ pub struct Neighbourhood {
     pub quarter: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 pub struct CityBlock {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub city_block: Option<String>,
@@ -144,7 +144,7 @@ pub struct CityBlock {
     pub retail: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 pub struct House {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub house_number: Option<u64>,
@@ -152,7 +152,7 @@ pub struct House {
     pub house_name: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 pub struct Place {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emergency: Option<String>,
@@ -198,7 +198,7 @@ pub struct Place {
     pub waterway: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 pub struct Address {
     pub continent: Option<String>,
     #[serde(flatten)]
@@ -223,7 +223,7 @@ pub struct Address {
     pub postcode: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum ID {
     #[serde(deserialize_with = "crate::serde_utils::deserialize_from_string")]
@@ -232,7 +232,7 @@ pub enum ID {
     Num(u64),
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 pub struct Response {
     /// Reference to the Nominatim internal database ID.
     pub place_id: Option<ID>,

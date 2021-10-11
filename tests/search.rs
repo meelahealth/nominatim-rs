@@ -21,5 +21,9 @@ async fn search() {
         .await
         .unwrap();
 
-    println!("{}", serde_json::to_string(&search).unwrap());
+    let search_expected: nominatim::types::Response = serde_json::from_str(include_str!("./search_expected.json")).unwrap();
+
+    println!("{}", serde_json::to_string_pretty(&search).unwrap());
+
+    assert_eq!(search, vec![search_expected]);
 }
