@@ -3,9 +3,9 @@ use crate::error::Error;
 use crate::serde_utils::*;
 use crate::types::Response;
 use crate::util::RequestBuilderHelper;
-use std::fmt;
 use derive_builder::Builder;
 use serde::Serialize;
+use std::fmt;
 
 #[derive(Debug, Clone)]
 pub enum Zoom {

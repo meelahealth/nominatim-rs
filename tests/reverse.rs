@@ -22,7 +22,8 @@ async fn reverse() {
 
     println!("{}", serde_json::to_string_pretty(&reverse).unwrap());
 
-    let reverse_expected: nominatim::types::Response = serde_json::from_str(include_str!("./reverse_expected.json")).unwrap();
+    let reverse_expected: nominatim::types::Response =
+        serde_json::from_str(include_str!("./reverse_expected.json")).unwrap();
 
     assert_eq!(reverse, reverse_expected);
 }
