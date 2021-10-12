@@ -1,5 +1,5 @@
-#[tokio::test]
-async fn reverse() {
+#[tokio::main]
+async fn main() {
     let client = nominatim::Client::new(
         url::Url::parse("https://nominatim.openstreetmap.org/").unwrap(),
         "nominatim-rust/0.1.0 test-suite".to_string(),
@@ -21,9 +21,4 @@ async fn reverse() {
         .unwrap();
 
     println!("{}", serde_json::to_string_pretty(&reverse).unwrap());
-
-    let reverse_expected: nominatim::Response =
-        serde_json::from_str(include_str!("./reverse_expected.json")).unwrap();
-
-    assert_eq!(reverse, reverse_expected);
 }

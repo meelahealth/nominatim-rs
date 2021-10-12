@@ -5,52 +5,20 @@ use crate::types::Response;
 use crate::util::RequestBuilderHelper;
 use derive_builder::Builder;
 use serde::Serialize;
-
-#[derive(Debug, Default, Clone, Serialize)]
-#[serde(into = "String")]
-pub struct Street {
-    pub house_number: String,
-    pub street_name: String,
-}
-
-impl From<Street> for String {
-    fn from(street: Street) -> Self {
-        format!("{} {}", street.house_number, street.street_name)
-    }
-}
-
-/// Represents the different types of way that nominatim can request for a
-/// location.
-#[derive(Debug, Clone, Serialize)]
-#[serde(untagged)]
-pub enum LocationQuery {
-    /// Free-form query string to search for. Free-form queries are
-    /// processed first left-to-right and then right-to-left if that fails.
-    /// So you may search for `pilkington avenue, birmingham` as well as
-    /// for `birmingham, pikington avenue`. Commas are optional but
-    /// improve performance by reducing the complexity of the search.
-    Generalised { q: String },
-    /// Alternative query string format split into several parameters
-    /// for structured requests. Structured requests are faster but
-    /// are less robust against alternative OSM tagging schemas.
-    Structured {
-        street: Option<Street>,
-        city: Option<String>,
-        county: Option<String>,
-        state: Option<String>,
-        country: Option<String>,
-        #[serde(rename = "postalcode")]
-        postal_code: Option<String>,
-    },
-}
+use std::fmt;
 
 #[derive(Builder, Debug, Clone, Serialize)]
-pub struct SearchQuery {
-    #[serde(flatten)]
-    pub location_query: LocationQuery,
-    /// Include a breakdown of the address into elements
+pub struct LookupQuery {
+    /// `osm_ids` is mandatory and must contain a comma-seperated list of
+    /// OSM ids each prefixed with its type, on of node(N), way(W) or
+    /// relation(R). Up to 50 ids can be queried at the same time.
+    #[builder(default)]
+    #[serde(serialize_with = "serialize_vector_as_string")]
+    pub osm_ids: Vec<String>,
+    /// Include a breakdown of the address into elements. (Default: false)
     #[serde(rename = "addressdetails")]
     #[serde(serialize_with = "serialize_bool_as_string")]
+    #[builder(default)]
     pub address_details: bool,
     /// Include additional information if the result is available
     #[builder(default)]
@@ -106,22 +74,23 @@ pub struct SearchQuery {
     #[builder(default)]
     #[serde(serialize_with = "serialize_vector_as_string_opt")]
     pub viewbox: Option<[f64; 4]>,
-    /// Sometimes you have several objects in OSM identifying the same place
-    /// or object in reality. The simplest case is a street being split into
-    /// many different OSM ways due to different characteristics. Nominatim
-    /// will attempt to detect such duplicates and only return on match
-    /// unless this parameter is set to `false`. (Default: `true`),
-    #[builder(default = "true")]
+    /// When a viewbox is given, restrict the result to items contained
+    /// within the viewbox (see above). When `viewbox` and `bounded = true`
+    /// are given, an amenity only search is allowed. Give the special keyword
+    /// for the amenity in square brackets, e.g. `[pub]` and a selection of
+    /// objects of this type is returned. There is no guarantee that the result
+    /// is complete. (Default: 0)
+    #[builder(default)]
     #[serde(serialize_with = "serialize_bool_as_string")]
-    pub dedupe: bool,
+    pub bounded: bool,
 }
 
 impl Client {
-    pub async fn search(
+    pub async fn lookup(
         &self,
-        query: SearchQuery,
+        query: LookupQuery,
     ) -> Result<Vec<Response>, Error> {
-        let mut url = self.base_url.join("search")?;
+        let mut url = self.base_url.join("lookup")?;
         url.set_query(Some(&serde_urlencoded::to_string(&query).unwrap()));
 
         let builder = self.client.get(url).query_s("format", "json");

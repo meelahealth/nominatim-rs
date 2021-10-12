@@ -38,24 +38,29 @@ impl fmt::Display for Zoom {
 pub struct ReverseQuery {
     #[serde(serialize_with = "serialize_as_string")]
     pub lat: f64,
+
     #[serde(serialize_with = "serialize_as_string")]
     pub lon: f64,
+
     /// Include a breakdown of the address into elements. (Default: true)
     #[serde(rename = "addressdetails")]
     #[serde(serialize_with = "serialize_bool_as_string")]
     #[builder(default = "true")]
     pub address_details: bool,
+
     /// Include additional information if the result is available
     #[builder(default)]
     #[serde(rename = "extratags")]
     #[serde(serialize_with = "serialize_bool_as_string")]
     pub extra_tags: bool,
+
     /// Include a list of alternative names in the results. This may include
     /// language variants, references, operator and brand.
     #[builder(default)]
-    #[serde(rename = "name_details")]
+    #[serde(rename = "namedetails")]
     #[serde(serialize_with = "serialize_bool_as_string")]
     pub name_details: bool,
+
     /// Preferred language order for showing search results, overrides
     /// the value specified in the "Accept-Languague" HTTP header.
     /// Either use a standard RFC2616 accept-language string or
@@ -64,6 +69,7 @@ pub struct ReverseQuery {
     #[serde(rename = "accept-language")]
     #[serde(serialize_with = "serialize_vector_as_string_opt")]
     pub accept_language: Option<Vec<String>>,
+
     #[serde(serialize_with = "serialize_as_string")]
     pub zoom: Zoom,
 }
