@@ -12,6 +12,7 @@ impl RequestBuilderHelper for reqwest::RequestBuilder {
         self.query(&[(key, val)])
     }
 
+    #[allow(clippy::option_if_let_else)]
     fn query_opt<'a, S: Into<Option<&'a String>>>(
         self,
         key: &str,

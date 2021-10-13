@@ -1,11 +1,13 @@
 use crate::client::Client;
 use crate::error::Error;
-use crate::serde_utils::*;
+use crate::serde_utils::{
+    serialize_as_string_opt, serialize_bool_as_string,
+    serialize_vector_as_string, serialize_vector_as_string_opt,
+};
 use crate::types::Response;
 use crate::util::RequestBuilderHelper;
 use derive_builder::Builder;
 use serde::Serialize;
-use std::fmt;
 
 #[derive(Builder, Debug, Clone, Serialize)]
 pub struct LookupQuery {

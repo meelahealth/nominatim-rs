@@ -2,7 +2,7 @@ use serde::{Deserializer, Serializer};
 use std::str::FromStr;
 
 pub fn serialize_vector_as_string<T, S>(
-    vec: &Vec<T>,
+    vec: &[T],
     s: S,
 ) -> Result<S::Ok, S::Error>
 where
@@ -33,7 +33,7 @@ where
         Some(ref vec) => {
             let mut string = String::new();
 
-            for item in vec.into_iter() {
+            for item in vec {
                 string.push_str(&item.to_string());
                 string.push(',');
             }
@@ -85,7 +85,7 @@ where
     T: FromStr,
     D: Deserializer<'de>,
 {
-    Ok(d.deserialize_string(string_visitor::FromStrVisitor::<T>::default())?)
+    d.deserialize_string(string_visitor::FromStrVisitor::<T>::default())
 }
 
 pub fn deserialize_from_string_opt<'de, T, D>(
@@ -95,13 +95,13 @@ where
     T: FromStr,
     D: Deserializer<'de>,
 {
-    Ok(d.deserialize_option(
+    d.deserialize_option(
         opt_string_visitor::OptionFromStrVisitor::<T>::default(),
-    )?)
+    )
 }
 
 mod string_visitor {
-    use serde::de::*;
+    use serde::de::{Error, Unexpected, Visitor};
     use std::fmt;
     use std::marker::PhantomData;
     use std::str;
@@ -159,7 +159,7 @@ mod string_visitor {
 }
 
 mod opt_string_visitor {
-    use serde::de::*;
+    use serde::de::{Deserializer, Error, Visitor};
     use std::fmt;
     use std::marker::PhantomData;
     use std::str::FromStr;
