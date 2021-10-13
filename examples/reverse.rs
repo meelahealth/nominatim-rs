@@ -2,7 +2,13 @@
 async fn main() {
     let client = nominatim::Client::new(
         url::Url::parse("https://nominatim.openstreetmap.org/").unwrap(),
-        "nominatim-rust/0.1.0 test-suite".to_string(),
+        concat!(
+            env!("CARGO_CRATE_NAME"),
+            "/",
+            env!("CARGO_PKG_VERSION"),
+            " ",
+            "test-suite"
+        ).to_string(),
         Some("john_t@mailo.com".to_string()),
     )
     .unwrap();
