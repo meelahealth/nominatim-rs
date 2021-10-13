@@ -1,3 +1,4 @@
+/// A nominatim client that is binded to the nominatim web api.
 pub struct Client {
     /// The user agent of your service. This is required by the Nominatim
     /// ToS.

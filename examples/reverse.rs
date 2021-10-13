@@ -8,7 +8,8 @@ async fn main() {
             env!("CARGO_PKG_VERSION"),
             " ",
             "test-suite"
-        ).to_string(),
+        )
+        .to_string(),
         Some("john_t@mailo.com".to_string()),
     )
     .unwrap();

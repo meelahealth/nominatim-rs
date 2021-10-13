@@ -117,6 +117,9 @@ pub struct SearchQuery {
 }
 
 impl Client {
+    /// The search API allows you to look up a location from a textual
+    /// description or addrses. Nominatim supports structured and
+    /// free-form search queries.
     pub async fn search(
         &self,
         query: SearchQuery,

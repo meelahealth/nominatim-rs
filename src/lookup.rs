@@ -86,6 +86,8 @@ pub struct LookupQuery {
 }
 
 impl Client {
+    /// The lookup API allows to query the address and other details of one or
+    /// multiple OSM objects like node, way or relation.
     pub async fn lookup(
         &self,
         query: LookupQuery,

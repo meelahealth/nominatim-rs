@@ -75,6 +75,25 @@ pub struct ReverseQuery {
 }
 
 impl Client {
+    /// Reverse geocoding generates an address from a latitude and
+    /// longitude.
+    ///
+    /// ## How it works
+    ///
+    /// The reverse geocoding API does not exactly compute the address for the
+    /// coordinate it receives. It works by finding the closest suitable OSM
+    /// object and returning its address information. This may occasionally lead
+    /// to unexpected results.
+    ///
+    /// First of all, Nominatim only includes OSM objects in its index that are
+    /// suitable for searching. Small, unnamed paths for example are missing
+    /// from the database and can therefore not be used for reverse geocoding
+    /// either.
+    ///
+    /// The other issue to be aware of is that the closest OSM object may not
+    /// always have a similar enough address to the coordinate you were
+    /// requesting. For example, in dense city areas it may belong to a
+    /// completely different street.
     pub async fn reverse(
         &self,
         query: ReverseQuery,
