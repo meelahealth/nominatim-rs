@@ -3,6 +3,7 @@ use reqwest::header::HeaderMap;
 use thiserror::Error;
 
 /// A nominatim client that is binded to the nominatim web api.
+#[derive(Clone)]
 pub struct Client {
     /// The user agent of your service. This is required by the Nominatim
     /// terms of service.
