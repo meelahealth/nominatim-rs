@@ -147,7 +147,7 @@ pub struct CityBlock {
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct House {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub house_number: Option<u64>,
+    pub house_number: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub house_name: Option<String>,
 }
