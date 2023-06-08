@@ -1,7 +1,7 @@
 #[tokio::main]
 async fn main() {
-    let client = nominatim::Client::new(
-        url::Url::parse("https://nominatim.openstreetmap.org/").unwrap(),
+    let client = nominatim_rs::Client::new(
+        reqwest::Url::parse("https://nominatim.openstreetmap.org/").unwrap(),
         concat!(
             env!("CARGO_CRATE_NAME"),
             "/",
@@ -16,11 +16,11 @@ async fn main() {
 
     let reverse = client
         .reverse(
-            nominatim::ReverseQueryBuilder::default()
+            nominatim_rs::ReverseQueryBuilder::default()
                 .address_details(true)
                 .lon(13.53918)
                 .lat(52.5460941)
-                .zoom(nominatim::Zoom::Building)
+                .zoom(nominatim_rs::Zoom::Building)
                 .build()
                 .unwrap(),
         )

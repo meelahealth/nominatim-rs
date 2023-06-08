@@ -1,7 +1,7 @@
 #[tokio::main]
 async fn main() {
-    let client = nominatim::Client::new(
-        url::Url::parse("https://nominatim.openstreetmap.org/").unwrap(),
+    let client = nominatim_rs::Client::new(
+        reqwest::Url::parse("https://nominatim.openstreetmap.org/").unwrap(),
         concat!(
             env!("CARGO_CRATE_NAME"),
             "/",
@@ -16,7 +16,7 @@ async fn main() {
 
     let lookup = client
         .lookup(
-            nominatim::LookupQueryBuilder::default()
+            nominatim_rs::LookupQueryBuilder::default()
                 .osm_ids(vec!["N317179427".to_string()])
                 .address_details(true)
                 .extra_tags(true)
