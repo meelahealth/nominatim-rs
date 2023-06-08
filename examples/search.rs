@@ -1,6 +1,6 @@
 #[tokio::main]
 async fn main() {
-    let client = nominatim::Client::new(
+    let client = nominatim_rs::Client::new(
         url::Url::parse("https://nominatim.openstreetmap.org/").unwrap(),
         concat!(
             env!("CARGO_CRATE_NAME"),
@@ -16,9 +16,9 @@ async fn main() {
 
     let search = client
         .search(
-            nominatim::SearchQueryBuilder::default()
+            nominatim_rs::SearchQueryBuilder::default()
                 .address_details(true)
-                .location_query(nominatim::LocationQuery::Generalised {
+                .location_query(nominatim_rs::LocationQuery::Generalised {
                     q: "bakery in berlin wedding".to_string(),
                 })
                 .limit(Some(1))

@@ -114,8 +114,6 @@ impl Client {
 
         let text = response.text().await?;
 
-        println!("{}", text);
-
         Ok(serde_json::from_str(&text)?)
     }
 }
