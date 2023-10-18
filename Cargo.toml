@@ -12,7 +12,7 @@ readme = "README.md"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-reqwest = "0.11"
+reqwest = { version = "0.11.18", default-features = false, features = ["tokio-rustls", "brotli", "gzip", "deflate", "json", "rustls", "rustls-tls"] }
 serde = { version = "1", features = [ "derive" ] }
 serde_json = "1"
 serde_urlencoded = "0.7"
