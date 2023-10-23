@@ -83,7 +83,7 @@ pub struct Region {
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Municipality {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub municiplality: Option<String>,
+    pub municipality: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub city: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
